@@ -1,0 +1,27 @@
+.options {
+    @include display-grid;
+    @include grid-template-rows(200px 1fr);
+    justify-items: center;
+    height: 100vh;
+    background-color: $color_Primary;
+    color: white;
+    gap: 20px;
+    .logo {
+        width: 90%;
+        margin: auto 0;
+        img {
+            width: 100%;
+        }
+    }
+    .generate {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: black;
+        width: auto;
+        padding: 10px;
+        height: 50px;
+        border-radius: 5px;
+        color: white;
+    }
+}

@@ -1,0 +1,33 @@
+.container {
+    @include display-grid;
+    @include grid-template-rows(repeat(auto-fit, minmax(200px, 1fr)));
+    overflow-y: auto;
+    grid-gap: 20px;
+    &-row {
+        @include display-grid;
+        @include grid-template-columns(repeat(auto-fill, minmax(200px, 1fr)));
+        color: white;
+        gap: 20px;
+        padding: 20px;
+        &-pokemon {
+            @include box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            color: black;
+            border-radius: 10px;
+            &-h2,
+            &-h3 {
+                width: 100%;
+            }
+            img {
+                width: 100%;
+            }
+            &:hover {
+                @include box-shadow($color-Alternative);
+            }
+        }
+    }
+}

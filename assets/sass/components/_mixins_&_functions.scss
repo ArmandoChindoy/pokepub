@@ -1,0 +1,53 @@
+/*
+*Mixins
+*/
+
+@mixin box-shadow($color) {
+    color: $color_Primary;
+    box-shadow: 0px 20px 33px 0px $color;
+}
+
+@mixin box {
+    color: $color_Primary;
+    @include box-shadow($color_Secundary);
+}
+
+@mixin titles($fuente) {
+    @if $fuente==$font_text {
+        font-family: $font_text;
+    }
+    @else {
+        font-family: $font_titles;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+}
+
+@function calculateRem($size) {
+    $remSize: $size / 16px;
+    @return $remSize * 1rem;
+}
+
+@mixin font-size($size) {
+    font-size: $size;
+    font-size: calculateRem($size);
+    line-height: calculateRem($size)*1.5;
+}
+
+
+/*
+*Funtions
+*/
+
+@function get-opacity($color, $amount) {
+    @return rgba($color, $amount);
+}
+
+@each $header,
+$size in (h1: 30px, h2: 25px, h3: 20px) {
+    #{$header} {
+        font-size: $size;
+        @include titles($font_titles);
+        margin: 0;
+    }
+}

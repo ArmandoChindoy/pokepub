@@ -1,0 +1,112 @@
+/*
+* Proyects Colors
+*/
+/*
+* Fonts
+*/
+/*
+*Mixins
+*/
+/*
+*Funtions
+*/
+h1 {
+  font-size: 30px;
+  font-family: "Osawald", sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 0;
+}
+
+h2 {
+  font-size: 25px;
+  font-family: "Osawald", sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 0;
+}
+
+h3 {
+  font-size: 20px;
+  font-family: "Osawald", sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 0;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 200px 1fr;
+  grid-template-columns: 200px 1fr;
+  background-color: white;
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.options {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 200px 1fr;
+  grid-template-rows: 200px 1fr;
+  justify-items: center;
+  height: 100vh;
+  background-color: red;
+  color: white;
+  gap: 20px;
+}
+.options .logo {
+  width: 90%;
+  margin: auto 0;
+}
+.options .logo img {
+  width: 100%;
+}
+.options .generate {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  width: auto;
+  padding: 10px;
+  height: 50px;
+  border-radius: 5px;
+  color: white;
+}
+
+.container {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
+  overflow-y: scroll;
+  grid-gap: 20px;
+}
+.container .row {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  color: white;
+  gap: 20px;
+}
+.container .row .pokemon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  display: block;
+  padding: 10px;
+}
+.container .row .pokemon img {
+  width: 100%;
+}
