@@ -2,6 +2,7 @@
     @include display-grid;
     @include grid-template-rows(repeat(auto-fit, minmax(200px, 1fr)));
     overflow-y: auto;
+    overflow-x: hidden;
     grid-gap: 20px;
     &-row {
         @include display-grid;
@@ -18,9 +19,10 @@
             padding: 10px;
             color: black;
             border-radius: 10px;
-            &-h2,
-            &-h3 {
-                width: 100%;
+            h3 {
+                @include media(mobile-only) {
+                    @include font-size(10px)
+                }
             }
             img {
                 width: 100%;
@@ -28,6 +30,9 @@
             &:hover {
                 @include box-shadow($color-Alternative);
             }
+        }
+        @include media(mobile-only) {
+            @include grid-template-columns(repeat(auto-fill, minmax(100px, 1fr)));
         }
     }
 }

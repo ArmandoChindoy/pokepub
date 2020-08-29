@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="shortcut icon" href="../assets/images/pokePub_logo.png" type="image/x-icon"/>
     <link rel="stylesheet" href="../assets/css/style.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&amp;family=Roboto:wght@300;500;700&amp;display=swap" rel="stylesheet"/>
     <title>PokePub</title>
@@ -13,6 +14,12 @@
     </div>
     <div class="container">
       <div class="container-row" id="container-row"></div>
+    </div>
+    <div class="overlay" id="overlay">
+      <div class="modal" id="modal"><a class="modal__closure__button" id="hide-Modal"><span>X</span></a>
+        <h1 class="modal__title" id="modal__title"></h1><img class="modal__img" id="modal__img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png" alt="alt"/><a class="modal__stats__button">
+          <h1>stats</h1></a>
+      </div>
     </div>
     <script src="../js/script.js"></script>
   </body>

@@ -34,6 +34,8 @@ h3 {
   margin: 0;
 }
 
+/* Media Queries Mixin
+**********************/
 * {
   padding: 0;
   margin: 0;
@@ -43,14 +45,16 @@ h3 {
 body {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 200px 1fr;
-  grid-template-columns: 200px 1fr;
+  -ms-grid-columns: 150px 1fr;
+  grid-template-columns: 150px 1fr;
   background-color: white;
   position: relative;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  overflow: hidden;
+  height: 100vh;
 }
 
 .options {
@@ -86,27 +90,138 @@ body {
 .container {
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: repeat(auto-fill, minmax(100px, 1fr));
-  grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
-  overflow-y: scroll;
+  -ms-grid-rows: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(200px, 1fr));
+  overflow-y: auto;
+  overflow-x: hidden;
   grid-gap: 20px;
 }
-.container .row {
+.container-row {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: repeat(auto-fit, minmax(100px, 1fr));
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  -ms-grid-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   color: white;
   gap: 20px;
+  padding: 20px;
 }
-.container .row .pokemon {
+.container-row-pokemon {
+  color: red;
+  box-shadow: 0px 20px 33px 0px black;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: black;
-  display: block;
   padding: 10px;
+  color: black;
+  border-radius: 10px;
 }
-.container .row .pokemon img {
+.container-row-pokemon-h2, .container-row-pokemon-h3 {
   width: 100%;
+}
+.container-row-pokemon img {
+  width: 100%;
+}
+.container-row-pokemon:hover {
+  box-shadow: 0px 20px 33px 0px yellow;
+}
+
+.modal {
+  color: red;
+  box-shadow: 0px 20px 33px 0px black;
+  width: 500px;
+  background: white;
+  padding: 2em;
+  border-radius: 0.5em;
+  text-align: center;
+  z-index: 2;
+  transform: translateY(-3000px);
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  height: 500px;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  color: black;
+}
+.modal__closure__button {
+  align-self: flex-end;
+}
+.modal__closure__button:hover {
+  color: yellow;
+}
+.modal__content {
+  display: flex;
+}
+.modal__img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+.modal__stats__button {
+  border-radius: 10px;
+  padding: 5px 10px;
+  align-self: center;
+  border: solid 1px black;
+  padding: 10px;
+  position: absolute;
+  z-index: 3;
+  bottom: 20px;
+}
+.modal__stats__button:hover {
+  box-shadow: 0px 20px 33px 0px black;
+}
+
+/*@keyframes animationIn {*/
+@keyframes modalIn {
+  0% {
+    transform: translateY(-3000px);
+  }
+  60% {
+    transform: translateY(25px);
+  }
+  75% {
+    transform: translateY(-10px);
+  }
+  90% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+/*@keyframes animationOut {*/
+@keyframes modalOut {
+  0% {
+    transform: translateY(5px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+  75% {
+    transform: translateY(25px);
+  }
+  100% {
+    transform: translateY(-3000px);
+  }
+}
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: none;
+  justify-items: center;
+  align-items: center;
+}
+
+.active {
+  display: block;
 }

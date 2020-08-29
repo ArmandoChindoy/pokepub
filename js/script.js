@@ -1,7 +1,6 @@
 (async function getPokemons() {
     /**
-     * Get Data
-     * @param {API URL} URL 
+     * @param {string} URL 
      */
     async function getData(URL) {
         const response = await fetch(URL);
@@ -12,25 +11,59 @@
         throw new Error('There is not Data');
     }
 
+    /**
+     * @param {string} HTMLString 
+     */
     function createTemplate(HTMLString) {
         const html = document.implementation.createHTMLDocument();
         html.body.innerHTML = HTMLString;
         return html.body.children[0];
     }
 
+    /**
+     * @param {Array} list 
+     * @returns {string} HTMLString 
+     */
     function pokemonTemplate(pokemon) {
-        return (`<div class="container-row-pokemon">
+        return (`<div class="container-row-pokemon" data-img=${pokemon.sprites.front_default} data-name=${pokemon.name} data-id=${pokemon.sprites.front_default}>
         <h2>${pokemon.id}</h2>
-        <img src="${pokemon.sprites.front_default}" alt="ditto"/>
+        <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}"/>
         <h3>${pokemon.name}</h3>
       </div>`)
     }
 
-    // function addEventClick(element) {
-    //     element.addEventListener('click', () => {
-    //         showModal(element);
-    //     });
-    // }
+    const $modal = document.getElementById('modal');
+    const $overlay = document.getElementById('overlay');
+    const $hideModal = document.getElementById('hide-Modal');
+
+    const $modal__title = document.getElementById('modal__title');
+    const $modal__image = document.getElementById('modal__img');
+
+
+
+    function hideModal() {
+        $overlay.classList.remove('active');
+        $modal.style.animation = 'modalOut .8s forwards';
+    }
+
+    function showModal(element) {
+        $overlay.classList.add('active');
+        $hideModal.addEventListener('click', hideModal);
+        $modal.style.animation = 'modalIn .8s forwards';
+
+        const title = element.dataset.name;
+        const sprite = element.dataset.img;
+
+        $modal__title.textContent = title;
+        $modal__image.setAttribute('src', sprite);
+
+    }
+
+    function addEventClick(element) {
+        element.addEventListener('click', () => {
+            showModal(element);
+        });
+    }
 
     const container = document.getElementById('container-row');
 
@@ -39,18 +72,19 @@
         pokemonsList.forEach(pokemon => {
             const HTMLString = pokemonTemplate(pokemon);
             const pokemonElement = createTemplate(HTMLString);
-            // const image = movieElement.querySelector('img');
-            // image.addEventListener('load', (event) => {
-            //     event.srcElement.classList.add('fadeIn');
-            // })
-            // addEventClick(movieElement);
+            pokemonElement.addEventListener('load', (event) => {
+                event.srcElement.classList.add('FadeIn')
+            })
+            addEventClick(pokemonElement);
             container.append(pokemonElement);
         });
     }
 
+    const API_URL = 'https://pokeapi.co/api/v2/pokedex/2/';
+
     const {
         pokemon_entries: pokemon_entries
-    } = await getData('https://pokeapi.co/api/v2/pokedex/2/');
+    } = await getData(API_URL);
 
     var pokemons = [];
     for (let index = 0; index < pokemon_entries.length; index++) {

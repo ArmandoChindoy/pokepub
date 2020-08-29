@@ -6,7 +6,7 @@
 
 body {
     @include display-grid;
-    @include grid-template-columns(200px 1fr);
+    @include grid-template-columns(25% 1fr);
     background-color: white;
     position: relative;
     top: 0;

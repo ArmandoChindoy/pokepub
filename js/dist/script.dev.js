@@ -1,28 +1,48 @@
 "use strict";
 
 (function getPokemons() {
-  var getData, createTemplate, pokemonTemplate, container, renderPokemons, _ref, pokemon_entries, pokemons, index;
+  var getData, createTemplate, pokemonTemplate, $modal, $overlay, $hideModal, $modal__title, $modal__image, hideModal, showModal, addEventClick, container, renderPokemons, API_URL, _ref, pokemon_entries, pokemons, index;
 
   return regeneratorRuntime.async(function getPokemons$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          renderPokemons = function _ref5(pokemonsList, container) {
+          renderPokemons = function _ref8(pokemonsList, container) {
             // container.children[0].remove();
             pokemonsList.forEach(function (pokemon) {
               var HTMLString = pokemonTemplate(pokemon);
-              var pokemonElement = createTemplate(HTMLString); // const image = movieElement.querySelector('img');
-              // image.addEventListener('load', (event) => {
-              //     event.srcElement.classList.add('fadeIn');
-              // })
-              // addEventClick(movieElement);
-
+              var pokemonElement = createTemplate(HTMLString);
+              pokemonElement.addEventListener('load', function (event) {
+                event.srcElement.classList.add('FadeIn');
+              });
+              addEventClick(pokemonElement);
               container.append(pokemonElement);
             });
           };
 
+          addEventClick = function _ref7(element) {
+            element.addEventListener('click', function () {
+              showModal(element);
+            });
+          };
+
+          showModal = function _ref6(element) {
+            $overlay.classList.add('active');
+            $hideModal.addEventListener('click', hideModal);
+            $modal.style.animation = 'modalIn .8s forwards';
+            var title = element.dataset.name;
+            var sprite = element.dataset.img;
+            $modal__title.textContent = title;
+            $modal__image.setAttribute('src', sprite);
+          };
+
+          hideModal = function _ref5() {
+            $overlay.classList.remove('active');
+            $modal.style.animation = 'modalOut .8s forwards';
+          };
+
           pokemonTemplate = function _ref4(pokemon) {
-            return "<div class=\"container-row-pokemon\">\n        <h2>".concat(pokemon.id, "</h2>\n        <img src=\"").concat(pokemon.sprites.front_default, "\" alt=\"ditto\"/>\n        <h3>").concat(pokemon.name, "</h3>\n      </div>");
+            return "<div class=\"container-row-pokemon\" data-img=".concat(pokemon.sprites.front_default, " data-name=").concat(pokemon.name, " data-id=").concat(pokemon.sprites.front_default, ">\n        <h2>").concat(pokemon.id, "</h2>\n        <img src=\"").concat(pokemon.sprites.front_default, "\" alt=\"").concat(pokemon.name, "\"/>\n        <h3>").concat(pokemon.name, "</h3>\n      </div>");
           };
 
           createTemplate = function _ref3(HTMLString) {
@@ -66,45 +86,46 @@
             });
           };
 
-          // function addEventClick(element) {
-          //     element.addEventListener('click', () => {
-          //         showModal(element);
-          //     });
-          // }
+          $modal = document.getElementById('modal');
+          $overlay = document.getElementById('overlay');
+          $hideModal = document.getElementById('hide-Modal');
+          $modal__title = document.getElementById('modal__title');
+          $modal__image = document.getElementById('modal__img');
           container = document.getElementById('container-row');
-          _context2.next = 7;
-          return regeneratorRuntime.awrap(getData('https://pokeapi.co/api/v2/pokedex/2/'));
+          API_URL = 'https://pokeapi.co/api/v2/pokedex/2/';
+          _context2.next = 16;
+          return regeneratorRuntime.awrap(getData(API_URL));
 
-        case 7:
+        case 16:
           _ref = _context2.sent;
           pokemon_entries = _ref.pokemon_entries;
           pokemons = [];
           index = 0;
 
-        case 11:
+        case 20:
           if (!(index < pokemon_entries.length)) {
-            _context2.next = 20;
+            _context2.next = 29;
             break;
           }
 
           _context2.t0 = pokemons;
-          _context2.next = 15;
+          _context2.next = 24;
           return regeneratorRuntime.awrap(getData('https://pokeapi.co/api/v2/pokemon/' + pokemon_entries[index].entry_number));
 
-        case 15:
+        case 24:
           _context2.t1 = _context2.sent;
 
           _context2.t0.push.call(_context2.t0, _context2.t1);
 
-        case 17:
+        case 26:
           index++;
-          _context2.next = 11;
+          _context2.next = 20;
           break;
 
-        case 20:
+        case 29:
           renderPokemons(pokemons, container);
 
-        case 21:
+        case 30:
         case "end":
           return _context2.stop();
       }
