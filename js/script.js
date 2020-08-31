@@ -71,7 +71,11 @@
 
     async function loadImages(container) {
         container.innerHTML = '';
+<<<<<<< HEAD
         const URL_IMAGE_Loading = 'assets/images/loading.gif'
+=======
+        const URL_IMAGE_Loading = '../assets/images/loading.gif'
+>>>>>>> 4b0a7b3f0dcea8590d9d0b3d87d59065c9c56fe1
         const HTMLString = loadingTemplate(URL_IMAGE_Loading);
         const loadingElement = createTemplate(HTMLString);
         container.append(loadingElement);
