@@ -9,7 +9,27 @@
     const $modal__title = document.getElementById('modal__title');
     const $modal__image = document.getElementById('modal__img');
 
+    const $container = document.getElementById('container-row');
+
+
+
     //  HTML Objects to render
+    /**
+     * 
+     * @param {Object} region 
+     */
+    function loadingTemplate(url) {
+        return (`<div class="container-row-pokemon">
+        <img src="${url}" alt="Loading image"/>
+      </div>`)
+    }
+    /**
+     * 
+     * @param {Object} region 
+     */
+    function regionTemplate(region) {
+        return (`<a class="regions__button" data-url="${region.url}">${region.name}</a>`)
+    }
     /**
      * 
      * @param {Object} pokemon 
@@ -20,13 +40,6 @@
         <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}"/>
         <h3>${pokemon.name}</h3>
       </div>`)
-    }
-    /**
-     * 
-     * @param {Object} region 
-     */
-    function regionTemplate(region) {
-        return (`<a class="regions__button" data-url="${region.url}">${region.name}</a>`)
     }
 
     //HTMLElemnt Generator
@@ -56,6 +69,15 @@
 
     // functions and events
 
+    async function loadImages(container) {
+        container.innerHTML = '';
+        const URL_IMAGE_Loading = '../assets/images/loading.gif'
+        const HTMLString = loadingTemplate(URL_IMAGE_Loading);
+        const loadingElement = createTemplate(HTMLString);
+        container.append(loadingElement);
+    }
+
+
     function hideModal() {
         $overlay.classList.remove('active');
         $modal.style.animation = 'modalOut .8s forwards';
@@ -79,6 +101,7 @@
     }
 
     async function showPokemonsByPokedex(element) {
+        loadImages($container);
         const url = element.dataset.url;
         const {
             pokemon_entries: pokemon_entries
@@ -88,7 +111,7 @@
         for (let index = 0; index < pokemon_entries.length; index++) {
             pokemons.push(await getData('https://pokeapi.co/api/v2/pokemon/' + pokemon_entries[index].entry_number));
         }
-        renderPokemons(pokemons, container);
+        renderPokemons(pokemons, $container);
     }
 
     /**
@@ -101,7 +124,6 @@
         });
     }
 
-    const container = document.getElementById('container-row');
 
     /**
      * 
@@ -110,6 +132,9 @@
      */
 
     //Renders
+
+
+
     function renderPokemons(pokemonsList, container) {
         container.innerHTML = '';
         pokemonsList.forEach(pokemon => {
@@ -124,7 +149,6 @@
     }
 
     function renderRegions(regionList, container) {
-        // container.children[0].remove();
         regionList.forEach(region => {
             const HTMLString = regionTemplate(region);
             const regionElement = createTemplate(HTMLString);
@@ -135,6 +159,7 @@
             container.append(regionElement);
         });
     }
+
 
     const API_URL = 'https://pokeapi.co/api/v2/';
     const API_URL_Pokedexs = `${API_URL}pokedex/`;
