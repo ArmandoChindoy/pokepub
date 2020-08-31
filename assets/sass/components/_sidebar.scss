@@ -1,6 +1,6 @@
 .options {
     @include display-grid;
-    @include grid-template-rows(200px 1fr);
+    @include grid-template-rows(100px auto auto);
     justify-items: center;
     align-items: flex-start;
     height: 100vh;
@@ -9,6 +9,7 @@
     gap: 20px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
+    padding: 20px;
     .logo {
         padding: 10px;
         height: 100%;
@@ -36,5 +37,26 @@
         @include media(mobile-only) {
             @include font-size(15px)
         }
+    }
+    .regions {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow-y: auto;
+        height: 100%;
+        margin: auto 0;
+        text-transform: uppercase;
+        font-size: 10px;
+        cursor: pointer;
+        &__button {
+            background-color: $color_Secundary;
+            @include default-button;
+            &:hover {
+                background-color: get-opacity($color-Alternative, .8);
+            }
+        }
+    }
+    @include media(mobile-only) {
+        padding: 0;
     }
 }

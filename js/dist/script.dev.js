@@ -1,32 +1,93 @@
 "use strict";
 
 (function getPokemons() {
-  var getData, createTemplate, pokemonTemplate, $modal, $overlay, $hideModal, $modal__title, $modal__image, hideModal, showModal, addEventClick, container, renderPokemons, API_URL, _ref, pokemon_entries, pokemons, index;
+  var $modal, $overlay, $hideModal, $regions, $modal__title, $modal__image, pokemonTemplate, regionTemplate, createTemplate, getData, hideModal, showModal, showPokemonsByPokedex, addEventClick, container, renderPokemons, renderRegions, API_URL, API_URL_Pokedexs, _ref2, pokedexs;
 
-  return regeneratorRuntime.async(function getPokemons$(_context2) {
+  return regeneratorRuntime.async(function getPokemons$(_context3) {
     while (1) {
-      switch (_context2.prev = _context2.next) {
+      switch (_context3.prev = _context3.next) {
         case 0:
-          renderPokemons = function _ref8(pokemonsList, container) {
+          renderRegions = function _ref12(regionList, container) {
             // container.children[0].remove();
+            regionList.forEach(function (region) {
+              var HTMLString = regionTemplate(region);
+              var regionElement = createTemplate(HTMLString);
+              regionElement.addEventListener('load', function (event) {
+                event.srcElement.classList.add('FadeIn');
+              });
+              addEventClick(regionElement, showPokemonsByPokedex);
+              container.append(regionElement);
+            });
+          };
+
+          renderPokemons = function _ref11(pokemonsList, container) {
+            container.innerHTML = '';
             pokemonsList.forEach(function (pokemon) {
               var HTMLString = pokemonTemplate(pokemon);
               var pokemonElement = createTemplate(HTMLString);
               pokemonElement.addEventListener('load', function (event) {
                 event.srcElement.classList.add('FadeIn');
               });
-              addEventClick(pokemonElement);
+              addEventClick(pokemonElement, showModal);
               container.append(pokemonElement);
             });
           };
 
-          addEventClick = function _ref7(element) {
+          addEventClick = function _ref10(element, event) {
             element.addEventListener('click', function () {
-              showModal(element);
+              event(element);
             });
           };
 
-          showModal = function _ref6(element) {
+          showPokemonsByPokedex = function _ref9(element) {
+            var url, _ref, pokemon_entries, pokemons, index;
+
+            return regeneratorRuntime.async(function showPokemonsByPokedex$(_context2) {
+              while (1) {
+                switch (_context2.prev = _context2.next) {
+                  case 0:
+                    url = element.dataset.url;
+                    _context2.next = 3;
+                    return regeneratorRuntime.awrap(getData(url));
+
+                  case 3:
+                    _ref = _context2.sent;
+                    pokemon_entries = _ref.pokemon_entries;
+                    pokemons = [];
+                    index = 0;
+
+                  case 7:
+                    if (!(index < pokemon_entries.length)) {
+                      _context2.next = 16;
+                      break;
+                    }
+
+                    _context2.t0 = pokemons;
+                    _context2.next = 11;
+                    return regeneratorRuntime.awrap(getData('https://pokeapi.co/api/v2/pokemon/' + pokemon_entries[index].entry_number));
+
+                  case 11:
+                    _context2.t1 = _context2.sent;
+
+                    _context2.t0.push.call(_context2.t0, _context2.t1);
+
+                  case 13:
+                    index++;
+                    _context2.next = 7;
+                    break;
+
+                  case 16:
+                    renderPokemons(pokemons, container);
+
+                  case 17:
+                  case "end":
+                    return _context2.stop();
+                }
+              }
+            });
+          };
+
+          showModal = function _ref8(element) {
             $overlay.classList.add('active');
             $hideModal.addEventListener('click', hideModal);
             $modal.style.animation = 'modalIn .8s forwards';
@@ -36,22 +97,12 @@
             $modal__image.setAttribute('src', sprite);
           };
 
-          hideModal = function _ref5() {
+          hideModal = function _ref7() {
             $overlay.classList.remove('active');
             $modal.style.animation = 'modalOut .8s forwards';
           };
 
-          pokemonTemplate = function _ref4(pokemon) {
-            return "<div class=\"container-row-pokemon\" data-img=".concat(pokemon.sprites.front_default, " data-name=").concat(pokemon.name, " data-id=").concat(pokemon.sprites.front_default, ">\n        <h2>").concat(pokemon.id, "</h2>\n        <img src=\"").concat(pokemon.sprites.front_default, "\" alt=\"").concat(pokemon.name, "\"/>\n        <h3>").concat(pokemon.name, "</h3>\n      </div>");
-          };
-
-          createTemplate = function _ref3(HTMLString) {
-            var html = document.implementation.createHTMLDocument();
-            html.body.innerHTML = HTMLString;
-            return html.body.children[0];
-          };
-
-          getData = function _ref2(URL) {
+          getData = function _ref6(URL) {
             var response, data;
             return regeneratorRuntime.async(function getData$(_context) {
               while (1) {
@@ -86,48 +137,55 @@
             });
           };
 
+          createTemplate = function _ref5(HTMLString) {
+            var html = document.implementation.createHTMLDocument();
+            html.body.innerHTML = HTMLString;
+            return html.body.children[0];
+          };
+
+          regionTemplate = function _ref4(region) {
+            return "<a class=\"regions__button\" data-url=\"".concat(region.url, "\">").concat(region.name, "</a>");
+          };
+
+          pokemonTemplate = function _ref3(pokemon) {
+            return "<div class=\"container-row-pokemon\" data-img=".concat(pokemon.sprites.front_default, " data-name=").concat(pokemon.name, " data-id=").concat(pokemon.sprites.front_default, ">\n        <h2>").concat(pokemon.id, "</h2>\n        <img src=\"").concat(pokemon.sprites.front_default, "\" alt=\"").concat(pokemon.name, "\"/>\n        <h3>").concat(pokemon.name, "</h3>\n      </div>");
+          };
+
+          //HTML elements
           $modal = document.getElementById('modal');
           $overlay = document.getElementById('overlay');
           $hideModal = document.getElementById('hide-Modal');
+          $regions = document.getElementById('regions'); //Modal Elements
+
           $modal__title = document.getElementById('modal__title');
-          $modal__image = document.getElementById('modal__img');
+          $modal__image = document.getElementById('modal__img'); //  HTML Objects to render
+
+          /**
+           * 
+           * @param {Object} pokemon 
+           */
+
           container = document.getElementById('container-row');
-          API_URL = 'https://pokeapi.co/api/v2/pokedex/2/';
-          _context2.next = 16;
-          return regeneratorRuntime.awrap(getData(API_URL));
+          /**
+           * 
+           * @param {Array} pokemonsList 
+           * @param {HTMLObjectElement} container 
+           */
+          //Renders
 
-        case 16:
-          _ref = _context2.sent;
-          pokemon_entries = _ref.pokemon_entries;
-          pokemons = [];
-          index = 0;
+          API_URL = 'https://pokeapi.co/api/v2/';
+          API_URL_Pokedexs = "".concat(API_URL, "pokedex/");
+          _context3.next = 21;
+          return regeneratorRuntime.awrap(getData(API_URL_Pokedexs));
 
-        case 20:
-          if (!(index < pokemon_entries.length)) {
-            _context2.next = 29;
-            break;
-          }
-
-          _context2.t0 = pokemons;
-          _context2.next = 24;
-          return regeneratorRuntime.awrap(getData('https://pokeapi.co/api/v2/pokemon/' + pokemon_entries[index].entry_number));
+        case 21:
+          _ref2 = _context3.sent;
+          pokedexs = _ref2.results;
+          renderRegions(pokedexs, $regions);
 
         case 24:
-          _context2.t1 = _context2.sent;
-
-          _context2.t0.push.call(_context2.t0, _context2.t1);
-
-        case 26:
-          index++;
-          _context2.next = 20;
-          break;
-
-        case 29:
-          renderPokemons(pokemons, container);
-
-        case 30:
         case "end":
-          return _context2.stop();
+          return _context3.stop();
       }
     }
   });

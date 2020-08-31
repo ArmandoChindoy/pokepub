@@ -1,4 +1,47 @@
 (async function getPokemons() {
+
+    //HTML elements
+    const $modal = document.getElementById('modal');
+    const $overlay = document.getElementById('overlay');
+    const $hideModal = document.getElementById('hide-Modal');
+    const $regions = document.getElementById('regions');
+    //Modal Elements
+    const $modal__title = document.getElementById('modal__title');
+    const $modal__image = document.getElementById('modal__img');
+
+    //  HTML Objects to render
+    /**
+     * 
+     * @param {Object} pokemon 
+     */
+    function pokemonTemplate(pokemon) {
+        return (`<div class="container-row-pokemon" data-img=${pokemon.sprites.front_default} data-name=${pokemon.name} data-id=${pokemon.sprites.front_default}>
+        <h2>${pokemon.id}</h2>
+        <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}"/>
+        <h3>${pokemon.name}</h3>
+      </div>`)
+    }
+    /**
+     * 
+     * @param {Object} region 
+     */
+    function regionTemplate(region) {
+        return (`<a class="regions__button" data-url="${region.url}">${region.name}</a>`)
+    }
+
+    //HTMLElemnt Generator
+
+    /**
+     * @param {string} HTMLString 
+     */
+    function createTemplate(HTMLString) {
+        const html = document.implementation.createHTMLDocument();
+        html.body.innerHTML = HTMLString;
+        return html.body.children[0];
+    }
+
+
+
     /**
      * @param {string} URL 
      */
@@ -11,41 +54,17 @@
         throw new Error('There is not Data');
     }
 
-    /**
-     * @param {string} HTMLString 
-     */
-    function createTemplate(HTMLString) {
-        const html = document.implementation.createHTMLDocument();
-        html.body.innerHTML = HTMLString;
-        return html.body.children[0];
-    }
-
-    /**
-     * @param {Array} list 
-     * @returns {string} HTMLString 
-     */
-    function pokemonTemplate(pokemon) {
-        return (`<div class="container-row-pokemon" data-img=${pokemon.sprites.front_default} data-name=${pokemon.name} data-id=${pokemon.sprites.front_default}>
-        <h2>${pokemon.id}</h2>
-        <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}"/>
-        <h3>${pokemon.name}</h3>
-      </div>`)
-    }
-
-    const $modal = document.getElementById('modal');
-    const $overlay = document.getElementById('overlay');
-    const $hideModal = document.getElementById('hide-Modal');
-
-    const $modal__title = document.getElementById('modal__title');
-    const $modal__image = document.getElementById('modal__img');
-
-
+    // functions and events
 
     function hideModal() {
         $overlay.classList.remove('active');
         $modal.style.animation = 'modalOut .8s forwards';
     }
 
+    /**
+     * 
+     * @param {Object} element 
+     */
     function showModal(element) {
         $overlay.classList.add('active');
         $hideModal.addEventListener('click', hideModal);
@@ -59,38 +78,72 @@
 
     }
 
-    function addEventClick(element) {
+    async function showPokemonsByPokedex(element) {
+        const url = element.dataset.url;
+        const {
+            pokemon_entries: pokemon_entries
+        } = await getData(url);
+
+        var pokemons = [];
+        for (let index = 0; index < pokemon_entries.length; index++) {
+            pokemons.push(await getData('https://pokeapi.co/api/v2/pokemon/' + pokemon_entries[index].entry_number));
+        }
+        renderPokemons(pokemons, container);
+    }
+
+    /**
+     * 
+     * @param {Object} element 
+     */
+    function addEventClick(element, event) {
         element.addEventListener('click', () => {
-            showModal(element);
+            event(element);
         });
     }
 
     const container = document.getElementById('container-row');
 
+    /**
+     * 
+     * @param {Array} pokemonsList 
+     * @param {HTMLObjectElement} container 
+     */
+
+    //Renders
     function renderPokemons(pokemonsList, container) {
-        // container.children[0].remove();
+        container.innerHTML = '';
         pokemonsList.forEach(pokemon => {
             const HTMLString = pokemonTemplate(pokemon);
             const pokemonElement = createTemplate(HTMLString);
             pokemonElement.addEventListener('load', (event) => {
                 event.srcElement.classList.add('FadeIn')
             })
-            addEventClick(pokemonElement);
+            addEventClick(pokemonElement, showModal);
             container.append(pokemonElement);
         });
     }
 
-    const API_URL = 'https://pokeapi.co/api/v2/pokedex/2/';
-
-    const {
-        pokemon_entries: pokemon_entries
-    } = await getData(API_URL);
-
-    var pokemons = [];
-    for (let index = 0; index < pokemon_entries.length; index++) {
-        pokemons.push(await getData('https://pokeapi.co/api/v2/pokemon/' + pokemon_entries[index].entry_number));
+    function renderRegions(regionList, container) {
+        // container.children[0].remove();
+        regionList.forEach(region => {
+            const HTMLString = regionTemplate(region);
+            const regionElement = createTemplate(HTMLString);
+            regionElement.addEventListener('load', (event) => {
+                event.srcElement.classList.add('FadeIn')
+            })
+            addEventClick(regionElement, showPokemonsByPokedex);
+            container.append(regionElement);
+        });
     }
-    renderPokemons(pokemons, container);
+
+    const API_URL = 'https://pokeapi.co/api/v2/';
+    const API_URL_Pokedexs = `${API_URL}pokedex/`;
+    const {
+        results: pokedexs
+    } = await getData(API_URL_Pokedexs);
+
+    renderRegions(pokedexs, $regions);
+
 })()
 
 

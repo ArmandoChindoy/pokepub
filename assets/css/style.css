@@ -57,7 +57,7 @@ body {
 
 .options {
   display: grid;
-  grid-template-rows: 200px 1fr;
+  grid-template-rows: 100px auto auto;
   justify-items: center;
   align-items: flex-start;
   height: 100vh;
@@ -66,6 +66,7 @@ body {
   gap: 20px;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+  padding: 20px;
 }
 .options .logo {
   padding: 10px;
@@ -97,6 +98,30 @@ body {
     font-size: 15px;
     font-size: 0.9375rem;
     line-height: 1.40625rem;
+  }
+}
+.options .regions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+  height: 100%;
+  margin: auto 0;
+  text-transform: uppercase;
+  font-size: 10px;
+  cursor: pointer;
+}
+.options .regions__button {
+  background-color: black;
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+.options .regions__button:hover {
+  background-color: rgba(255, 255, 0, 0.8);
+}
+@media only screen and (max-width: 768px) {
+  .options {
+    padding: 0;
   }
 }
 
